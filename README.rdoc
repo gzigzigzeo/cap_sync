@@ -1,0 +1,55 @@
+= Capistrano Sync Recipes
+
+Recipes to synchronize database & server data from production server to developement machine.
+
+= Installation
+
+Install the gem:
+
+  > gem install cap_sync
+
+Add following line to your Capfile:
+
+  gem 'cap_sync'; require 'cap_sync' 
+
+= Syncing database
+
+  > cap sync:db
+
+Does following:
+1. Accesses production server.
+2. Dumps database to app tmp.
+3. Downloads dump to local app tmp.
+4. Imports dump to local app development database.
+
+Remote database credentials are loaded from remote application config/database.yml.
+
+Available variables and defaults:
+  :sync_local_env => 'development',      # Local environment key in database.yml
+  :sync_remote_env => 'production',      # Remote environment key in database.yml
+  :sync_remote_dump_cmd => 'mysqldump',  # Remote mysqldump command
+  :sync_local_load_cmd => 'mysql',       # Local mysqldump command
+  :sync_keep_dumps => false,             # Keep downloaded dump in app's tmp after syncing
+
+You can modify it in your deploy.rb as follows:
+
+  set :sync_local_cmd, '/usr/local/bin/mysql/bin'
+
+= Syncing data
+
+  > cap sync:data
+  
+Rsync's local and remote folders. By default, does incremental implicit synchronization.
+
+Available variables and defaults:
+  :sync_folders => {"#{shared_path}/system" => "public/system"},  # Folders to sync remote => local
+  :rsync_cmd => "rsync",                                          # rsync command
+  :rsync_flags => "-rv --stats --delete"                          # rsync flags
+
+= Todo
+
+1. Correctly handle multiple servers.
+2. Tests.
+3. Get gem to autoload, without require.
+4. Sync multiple databases.
+5. Sync up and down.
