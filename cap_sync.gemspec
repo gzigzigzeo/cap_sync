@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.author      = "Victor Sokolov"
   s.email       = "gzigzigzeo@gmail.com"
   s.homepage    = "http://github.com/gzigzigzeo/cap_sync"
-  s.summary     = %q{Capistrano recipe to sync database & files to your development machine from production server}
-  s.description = %q{Capistrano recipe to sync database & files to your development machine from production server}
+  s.summary     = %q{Recipes to clone database & public data from production server to developement machine}
+  s.description = %q{Recipes to clone database & public data from production server to developement machine}
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

@@ -1,6 +1,6 @@
 = Capistrano Sync Recipes
 
-Recipes to synchronize database & server data from production server to developement machine.
+Recipes to clone database & public data from production server to developement machine.
 
 = Installation
 
