@@ -10,7 +10,11 @@ Install the gem:
 
 Add following line to your Capfile:
 
-  gem 'cap_sync'; require 'cap_sync' 
+if gem 'cap_sync'
+  require 'cap_sync' 
+else
+  puts '* Warning: Execute "gem install cap_sync" to make sync:db and sync:data work'
+end
 
 = Syncing database
 
