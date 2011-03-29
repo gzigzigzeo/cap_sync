@@ -52,8 +52,7 @@ Available variables and defaults:
 
 = Todo
 
-1. Correctly handle multiple servers.
+1. Correctly handle multiple servers (database).
 2. Tests.
-3. Get gem to autoload, without require.
-4. Sync multiple databases.
-5. Sync up and down.
+3. Sync multiple databases.
+4. Sync up and down.
