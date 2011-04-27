@@ -46,6 +46,7 @@ You can modify it in your deploy.rb as follows:
 Rsync's local and remote folders. By default, does incremental implicit synchronization.
 
 Available variables and defaults:
+  :sync_method => :rsync,                                         # :rsync - sync with rsync, :cap - sync with capistrano
   :sync_folders => {"#{shared_path}/system" => "public/system"},  # Folders to sync remote => local
   :rsync_cmd => "rsync",                                          # rsync command
   :rsync_flags => "-rv --stats --delete"                          # rsync flags

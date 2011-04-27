@@ -12,7 +12,8 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     :sync_folders => {"#{shared_path}/system" => "public/system"},  # Folders to sync remote => local
     :rsync_cmd => "rsync",                                          # rsync command
-    :rsync_flags => "-rv --stats --delete"                          # rsync flags
+    :rsync_flags => "-rv --stats --delete",                         # rsync flags
+    :sync_method => :rsync                                          # :rsync or :cap
   }.each do |var, value|
     self.set(var, value) unless exists?(var)
   end
@@ -35,10 +36,28 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "Sync remote production data with local development machine"
     task :data do    
-      sync_folders.each do |remote, local|
-        host = find_servers(:roles => :web).first.host        
-        system("#{rsync_cmd} #{rsync_flags} #{user}@#{host}:#{remote}/. #{local}")
-      end
+      if sync_method == :rsync
+        sync_folders.each do |remote, local|
+          host = find_servers(:roles => :web).first.host        
+          system("#{rsync_cmd} #{rsync_flags} #{user}@#{host}:#{remote}/. #{local}")
+        end
+      elsif sync_method == :cap
+        sync_folders.each do |remote, local|
+          ::FileUtils.rm_rf(local, :verbose => true)
+          download(remote, local, :recursive => true) do |event, downloader, *args|
+            case event
+            when :close then
+              puts "finished with #{args[0].remote}"
+            when :mkdir then
+              puts "creating directory #{args[0]}"
+            when :finish then
+              puts "all done!"
+            end
+          end
+        end
+      else
+        raise ArgumentError, "Unknown sync method: should be :cap or :sync"
+      end        
     end
   end
 

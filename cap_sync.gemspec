@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "cap_sync"
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.platform    = Gem::Platform::RUBY
   s.author      = "Victor Sokolov"
   s.email       = "gzigzigzeo@gmail.com"
