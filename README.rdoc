@@ -4,17 +4,15 @@ Recipes to clone database & public data from production server to developement m
 
 = Installation
 
-Install the gem:
+Add this to your Gemfile
 
-  > gem install cap_sync
+  group :development do
+    gem 'cap_sync', :require => false
+  end
 
 Add following line to your Capfile:
 
-if gem 'cap_sync'
   require 'cap_sync' 
-else
-  puts '* Warning: Execute "gem install cap_sync" to make sync:db and sync:data work'
-end
 
 = Syncing database
 
