@@ -36,7 +36,8 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "Sync remote production data with local development machine"
     task :data do
-      folders_to_sync = Hash[*ENV['FOLDERS'].split(',')] || sync_folders
+      folders_to_sync = Hash[*ENV['FOLDERS'].split(',')] if ENV['FOLDERS'].present?
+      folders_to_syn ||= sync_folders
       
       if sync_method == :rsync
         folders_to_sync.each do |remote, local|
