@@ -35,14 +35,17 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     desc "Sync remote production data with local development machine"
-    task :data do    
+    task :data do
+      folders_to_sync = sync_folders
+      folders_to_sync = folders_to_sync & ENV['FOLDERS'].split(',') if ENV['FOLDERS'].present?
+      
       if sync_method == :rsync
-        sync_folders.each do |remote, local|
+        folders_to_sync.each do |remote, local|
           host = find_servers(:roles => :web).first.host        
           system("#{rsync_cmd} #{rsync_flags} #{user}@#{host}:#{remote}/. #{local}")
         end
       elsif sync_method == :cap
-        sync_folders.each do |remote, local|
+        folders_to_sync.each do |remote, local|
           ::FileUtils.rm_rf(local, :verbose => true)
           download(remote, local, :recursive => true) do |event, downloader, *args|
             case event
