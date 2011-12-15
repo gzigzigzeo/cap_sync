@@ -1,4 +1,4 @@
-= Capistrano Sync Recipes
+= Capistrano Db & Data Sync Recipes
 
 Recipes to clone database & public data from production server to developement machine.
 
@@ -7,51 +7,31 @@ Recipes to clone database & public data from production server to developement m
 Add this to your Gemfile
 
   group :development do
-    gem 'cap_sync', :require => false
+    gem 'cap_sync'
   end
 
-Add following line to your Capfile:
+Add following line to your deploy.rb:
 
-  require 'cap_sync' 
+  require 'cap_sync/capistrano' 
 
 = Syncing database
 
-  > cap sync:db
+  > bundle exec cap sync:db
 
-Does following:
-1. Accesses production server.
-2. Dumps database to app's tmp.
-3. Downloads dump to local app's tmp.
-4. Imports dump to local app's development database.
+See lib/cap_sync/db.rb for list of available options.
 
-Remote database credentials are loaded from remote application config/database.yml.
-
-Available variables and defaults:
-  :sync_local_env => 'development',      # Local environment key in database.yml
-  :sync_remote_env => 'production',      # Remote environment key in database.yml
-  :sync_remote_dump_cmd => 'mysqldump',  # Remote mysqldump command
-  :sync_local_load_cmd => 'mysql',       # Local mysqldump command
-  :sync_keep_dumps => false,             # Keep downloaded dump in app's tmp after syncing
-
-You can modify it in your deploy.rb as follows:
-
-  set :sync_local_cmd, '/usr/local/bin/mysql/bin'
+You can set: local & remote environment, mysql dump/client command & flags, turn compression on/off, etc.
 
 = Syncing data
 
-  > cap sync:data
+  > bundle exec cap sync:data
   
-Rsync's local and remote folders. By default, does incremental implicit synchronization.
+Rsync's local and remote folders. By default, does incremental implicit synchronization with rsync.
 
-Available variables and defaults:
-  :sync_method => :rsync,                                         # :rsync - sync with rsync, :cap - sync with capistrano
-  :sync_folders => {"#{shared_path}/system" => "public/system"},  # Folders to sync remote => local
-  :rsync_cmd => "rsync",                                          # rsync command
-  :rsync_flags => "-rv --stats --delete"                          # rsync flags
+See lib/cap_sync/data.rb for list of available options.
 
 = Todo
 
 1. Correctly handle multiple servers (database).
-2. Tests.
-3. Sync multiple databases.
-4. Sync up and down.
+2. Envflags to modify options on the fly.
+3. Win32 compability.
