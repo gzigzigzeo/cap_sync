@@ -41,7 +41,7 @@ namespace :sync do
 
     # Load dump into local database
     username, password, database, host, port = local_database_config(sync_local_env)
-    system("#{sync_local_load_cmd} #{database} -u#{username} --password=\"#{password}\" < #{sync_local_tmp_path}/#{dump}")
+    system("#{sync_local_load_cmd} #{database} -h#{host} -P#{port} -u#{username} --password=\"#{password}\" < #{sync_local_tmp_path}/#{dump}")
 
     # Remove temporary files
     unless sync_local_keep_dumps
